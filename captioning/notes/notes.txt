@@ -1,7 +1,0 @@
-Hulk 2: 
-1) We design our experiments using
-the environment D of the CALVIN benchmark [8], which
-consists of 6 hours of teleoperated undirected play data
-that might contain suboptimal behavior
-
-2) in hulc 2 util files: visualize_calvin and visualize_real_world
