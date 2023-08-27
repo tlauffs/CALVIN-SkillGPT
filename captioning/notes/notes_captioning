@@ -1,0 +1,43 @@
+Hulk 2: 
+1) We design our experiments using
+the environment D of the CALVIN benchmark [8], which
+consists of 6 hours of teleoperated undirected play data
+that might contain suboptimal behavior
+
+2) in hulc 2 util files: visualize_calvin and visualize_real_world
+
+3) train affordance model : use gripper open close signals
+
+
+Data Preprocessing:
+
+Organize your labeled data into sequences of RGB images and their corresponding action labels.
+Normalize and resize the images to a consistent size. Data augmentation techniques can also be applied to artificially increase the size of your training dataset.
+Model Selection:
+
+Given that you have sequences of images and corresponding labels, Recurrent Neural Networks (RNNs) or Convolutional Neural Networks (CNNs) with attention mechanisms are commonly used architectures for sequence-to-sequence tasks like action recognition.
+Model Architecture:
+
+You can build a model using a combination of CNNs and RNNs.
+The CNNs can be used to extract features from individual frames in the sequence.
+The RNNs, such as LSTM (Long Short-Term Memory) or GRU (Gated Recurrent Unit), can then take the sequence of features and learn the temporal relationships between them.
+Training:
+
+Split your labeled dataset into training, validation, and testing sets.
+Train the model using the labeled data, optimizing for the action prediction task.
+Use appropriate loss functions (e.g., categorical cross-entropy) for multi-class action classification.
+Evaluation:
+
+Evaluate the trained model on the validation set to tune hyperparameters and avoid overfitting.
+Use metrics like accuracy, precision, recall, F1-score, or custom evaluation metrics that suit your problem.
+Predicting Unlabeled Data:
+
+Once you have a trained model, use it to predict actions for the unlabeled data.
+Since you mentioned that you have some labeled data (1%), you can also consider using semi-supervised learning techniques, where you train on both labeled and unlabeled data to improve generalization.
+Fine-Tuning and Iteration:
+
+As you predict actions for the unlabeled data, you can add these newly labeled examples to your training dataset and fine-tune your model iteratively.
+Model Deployment:
+
+Once you are satisfied with the performance, you can deploy the model to make predictions for new incoming sequences of images.
+Keep in mind that this is a complex task, and the effectiveness of the model depends on factors such as the quality and quantity of labeled data, the choice of model architecture, and the appropriate preprocessing and augmentation techniques used. Experimentation and iteration are key to achieving good results.
