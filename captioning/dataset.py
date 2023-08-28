@@ -22,7 +22,7 @@ from torch.utils.data import DataLoader, Dataset
 from transformers import GPT2LMHeadModel, GPT2Tokenizer, AdamW, get_linear_schedule_with_warmup
 from torchvision.transforms import Compose, Resize, CenterCrop, ToTensor, Normalize, ToPILImage
 
-
+'''
 def r3m_preprocess(n_px=224):
     return Compose([
         ToPILImage(mode='RGB'),
@@ -30,6 +30,7 @@ def r3m_preprocess(n_px=224):
         CenterCrop(224),
         ToTensor()
     ])
+'''
 
 class AttrDict(dict):
     __setattr__ = dict.__setitem__
@@ -54,12 +55,13 @@ class CustomDataset(Dataset):
         self.data_path = data_path
         self.caption_data = self.load_caption_data(caption_path)
         self.data_files = [f for f in os.listdir(data_path) if f.startswith('episode_')]
-
+        '''
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.r3m = load_r3m("resnet50")
         self.r3m.eval()
         self.r3m.to(self.device)
         self.transform =  r3m_preprocess()
+        '''
 
     def __len__(self):
         return len(self.caption_data)
@@ -115,10 +117,15 @@ class CustomDataset(Dataset):
             file_path = os.path.join(self.data_path, "episode_{}.npz".format(epi_num))
             data = np.load(file_path)
             actions[j] = torch.tensor(data['actions'])  # Assign values to the tensor       
+            '''
+            ALREADY BEING DONE IN PARSE_DATASET
             o_static = self.transform(data['rgb_static'].astype(np.uint8)) * 255.0
-            o_gripper = self.transform(data['rgb_static'].astype(np.uint8)) * 255.0
+            o_gripper = self.transform(data['rgb_gripper'].astype(np.uint8)) * 255.0
             observations[j] = torch.tensor(self.r3m(o_static.unsqueeze(dim=0).to(self.device)).squeeze().detach().cpu().numpy())
             observations[j+3] = torch.tensor(self.r3m(o_gripper.unsqueeze(dim=0).to(self.device)).squeeze().detach().cpu().numpy())
+            '''
+            observations[j] = torch.tensor(data['rgb_static'])
+            observations[j+3] = torch.tensor(data['rgb_gripper'])
             j += 1
 
 
