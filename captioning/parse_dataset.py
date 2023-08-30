@@ -16,8 +16,11 @@ def r3m_preprocess(n_px=224):
 
 
 path = '/home/tim/'
-src_folder= '{}calvin_debug_dataset/training'.format(path)
-parse_folder= '{}calvin_debug_dataset_parsed/training'.format(path)
+
+#src_folder= '{}calvin_debug_dataset/training'.format(path)
+# parse_folder= '{}calvin_debug_dataset_parsed/training'.format(path)
+src_folder= '{}calvin_debug_dataset/validation'.format(path)
+parse_folder= '{}calvin_debug_dataset_parsed/validation'.format(path)
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 r3m = load_r3m("resnet50")
