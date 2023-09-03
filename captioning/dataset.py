@@ -14,6 +14,8 @@ from tqdm import tqdm
 from enum import Enum
 from typing import Optional
 from r3m import load_r3m
+import clip
+import config as CFG
 
 import torch
 import torch.nn as nn
@@ -74,7 +76,9 @@ class CustomDataset(Dataset):
 
     def __getitem__(self, idx):
         annotation = self.caption_data[idx]
+
         caption = annotation[1]
+
         tokens = self.tokenizer.encode(caption, add_special_tokens=True, max_length=self.max_seq_length, truncation=True)
 
         padding_length = self.max_seq_length - len(tokens)
@@ -86,24 +90,34 @@ class CustomDataset(Dataset):
         gpt_tokens[~gpt_mask] = 0
         gpt_mask = gpt_mask.float()
 
+       
+       # clip_text_features = clip_text_encoder(clip.tokenize(instruction).to(device)).detach().cpu().numpy()
+
         start_epi = annotation[0][0]
 
-
         actions = torch.zeros(64, 7) 
-
-
         observations = torch.zeros(64, 2048) 
-        '''
-        for i in range(0, 64):
+
+        """
+        j = 0
+        for i in range(0, 63):
+            epi_num = str(start_epi + i).zfill(7)
+            file_path = os.path.join(self.data_path, "episode_{}.npz".format(epi_num))
+            data = np.load(file_path)
+            actions[i] = torch.tensor(data['actions'])   
+            if(i == 0 or i == 15 or i == 31 or i == 47 or i == 63):
+                observations[j] = torch.tensor(data['rgb_static'])
+                observations[j+5] = torch.tensor(data['rgb_gripper'])
+                j += 1
+        """
+        for i in range(0, 63):
             epi_num = str(start_epi + i).zfill(7)
             file_path = os.path.join(self.data_path, "episode_{}.npz".format(epi_num))
             data = np.load(file_path)
             actions[i] = torch.tensor(data['actions'])   
             observations[i] = torch.tensor(data['rgb_static'])
-            #observations[i+64] = torch.tensor(data['rgb_gripper'])
-        
-        return AttrDict({'gpt_tokens': gpt_tokens, 'gpt_mask': gpt_mask, 'instruction': caption,'actions': actions,'observations': observations})
-        '''
+
+
 
         return AttrDict({'gpt_tokens': gpt_tokens, 'gpt_mask': gpt_mask, 'instruction': caption,'actions': actions,'observations': observations})
     

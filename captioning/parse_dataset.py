@@ -45,6 +45,7 @@ for idx, data_episode in enumerate(data_episodes):
     static_transform = torch.tensor(r3m(static.unsqueeze(dim=0).to(device)).squeeze().detach().cpu().numpy())
     gripper_transform = torch.tensor(r3m(gripper.unsqueeze(dim=0).to(device)).squeeze().detach().cpu().numpy())
     
+    
     #debug
     '''
     print(data['rgb_static'].shape)
