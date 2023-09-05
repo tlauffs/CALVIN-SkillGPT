@@ -1,28 +1,12 @@
 import numpy as np
-import glob
 import os
-
 from pathlib import Path
-import cv2
 import numpy as np
-from matplotlib.animation import ArtistAnimation
-import matplotlib.pyplot as plt
-import matplotlib.cm as cm
 import numpy as np
 from sklearn.manifold import TSNE
-from tqdm import tqdm
-from enum import Enum
-from typing import Optional
 from r3m import load_r3m
-import clip
-import config as CFG
-
 import torch
-import torch.nn as nn
-import torch.multiprocessing as mp
-from torch.utils.data import DataLoader, Dataset
-from transformers import GPT2LMHeadModel, GPT2Tokenizer, AdamW, get_linear_schedule_with_warmup
-from torchvision.transforms import Compose, Resize, CenterCrop, ToTensor, Normalize, ToPILImage
+from torch.utils.data import Dataset
 
 '''
 def r3m_preprocess(n_px=224):
