@@ -35,12 +35,13 @@ class AttrDict(dict):
 
 
 class CustomDataset(Dataset):
-    def __init__(self, data_path, caption_path, tokenizer, max_seq_length):
+    def __init__(self, data_path, caption_path, tokenizer, max_seq_length, observation_data = 'static_and_gripper'):
         self.tokenizer = tokenizer
         self.max_seq_length = max_seq_length
         self.data_path = data_path
         self.caption_data = self.load_caption_data(caption_path)
         self.data_files = [f for f in os.listdir(data_path) if f.startswith('episode_')]
+        self.observation_data = observation_data
         '''
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.r3m = load_r3m("resnet50")
@@ -62,6 +63,7 @@ class CustomDataset(Dataset):
         annotation = self.caption_data[idx]
 
         caption = annotation[1]
+        caption_index = annotation[0]
 
         tokens = self.tokenizer.encode(caption, add_special_tokens=True, max_length=self.max_seq_length, truncation=True)
 
@@ -73,7 +75,6 @@ class CustomDataset(Dataset):
         gpt_mask = gpt_tokens.ge(0)
         gpt_tokens[~gpt_mask] = 0
         gpt_mask = gpt_mask.float()
-
        
        # clip_text_features = clip_text_encoder(clip.tokenize(instruction).to(device)).detach().cpu().numpy()
 
@@ -82,26 +83,19 @@ class CustomDataset(Dataset):
         actions = torch.zeros(64, 7) 
         observations = torch.zeros(64, 2048) 
 
-        """
-        j = 0
         for i in range(0, 63):
             epi_num = str(start_epi + i).zfill(7)
             file_path = os.path.join(self.data_path, "episode_{}.npz".format(epi_num))
             data = np.load(file_path)
             actions[i] = torch.tensor(data['actions'])   
-            if(i == 0 or i == 15 or i == 31 or i == 47 or i == 63):
-                observations[j] = torch.tensor(data['rgb_static'])
-                observations[j+5] = torch.tensor(data['rgb_gripper'])
-                j += 1
-        """
-        for i in range(0, 63):
-            epi_num = str(start_epi + i).zfill(7)
-            file_path = os.path.join(self.data_path, "episode_{}.npz".format(epi_num))
-            data = np.load(file_path)
-            actions[i] = torch.tensor(data['actions'])   
-            observations[i] = torch.tensor(data['rgb_static'])
+            if self.observation_data == 'static':
+                observations[i] = torch.tensor(data['rgb_static'])
+            elif self.observation_data == 'gripper':
+                observations[i] = torch.tensor(data['rgb_gripper'])
+            else:
+                observations[i] = torch.tensor(data['observations'])
 
 
 
-        return AttrDict({'gpt_tokens': gpt_tokens, 'gpt_mask': gpt_mask, 'instruction': caption,'actions': actions,'observations': observations})
+        return AttrDict({'gpt_tokens': gpt_tokens, 'gpt_mask': gpt_mask, 'instruction': caption,'caption_index': caption_index,'actions': actions,'observations': observations})
     

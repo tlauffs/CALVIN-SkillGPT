@@ -4,6 +4,7 @@ from pathlib import Path
 import cv2
 import numpy as np
 import config as CFG
+import matplotlib.pyplot as plt
 
 def visualize():
 
@@ -59,4 +60,20 @@ def visualize():
         else:
             print(f'Unrecognized keycode "{key}"')
 
-        
+def showImages(startindex, datapath):
+    plot_index = 1
+    plt.figure(figsize=(16, 6), dpi=80)
+    for d in ["rgb_static", "rgb_gripper"]:
+        for index in [0, 16, 32, 48, 64]:
+            index = index + startindex
+            frame = np.load(f"{datapath}/episode_{index:07d}.npz", allow_pickle=True)
+            if d not in frame:
+                print(f"Data {d} cannot be found in transition")
+                continue
+            
+            img = frame[d]
+            plt.subplot(2, 5, plot_index)
+            plt.imshow(img)
+            plt.axis('off')
+            plot_index += 1
+    plt.show()

@@ -97,7 +97,7 @@ class ClipCaptionModel(nn.Module):
                                                                      clip_length, num_layers)
         self.behaviour_encoder = BehaviourEncoder()
         # self.project_to_gpt = nn.Linear(514, self.gpt_embedding_size).to("cuda")
-        self.project_to_gpt = nn.Linear(2055, self.gpt_embedding_size).to("cuda")
+        self.project_to_gpt = nn.Linear(CFG.d_model, self.gpt_embedding_size).to("cuda")
 
     def get_dummy_token(self, batch_size: int, device: torch.device) -> torch.Tensor:
         return torch.zeros(batch_size, self.prefix_length, dtype=torch.int64, device=device)
