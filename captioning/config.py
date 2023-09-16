@@ -31,3 +31,14 @@ dropout = 0.1
 d_ff = 512
 n_layers = 3
 epochs = 1000
+
+
+start_epi_dd = 53819
+end_epi_dd = 611098
+
+modifed_emb_path = 'generated_captions/modified_emb.npy'
+generated_captions_path = 'generated_captions/generated_captions.npy'
+combined_captions_path = 'generated_captions/combined_captions.npy'
+
+#for VAE model
+img_size = 180
