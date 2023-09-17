@@ -20,7 +20,7 @@ class LanguageConditionedPolicy(nn.Module):
             nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, stride=2, padding=1),
             nn.ReLU(inplace=True),
             nn.Flatten(),
-            nn.Linear(128*23*40, 512)
+            nn.Linear(128*23*23, 512)
         )
         
     def forward(self, language_emb, image_features):
