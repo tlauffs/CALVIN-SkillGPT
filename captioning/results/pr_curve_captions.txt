@@ -1,0 +1,33 @@
+Threshold:  0.7
+True positives:  562
+False positives:  46
+Precision:  0.9243421052631579
+Recall:  0.5558852621167161
+
+
+Threshold:  0.75
+True positives:  551
+False positives:  44
+Precision:  0.9260504201680673
+Recall:  0.5450049455984174
+
+
+Threshold:  0.8
+True positives:  506
+False positives:  35
+Precision:  0.9353049907578558
+Recall:  0.5004945598417408
+
+
+Threshold:  0.85
+True positives:  256
+False positives:  12
+Precision:  0.9552238805970149
+Recall:  0.2532146389713155
+
+
+Threshold:  0.9
+True positives:  29
+False positives:  1
+Precision:  0.9666666666666667
+Recall:  0.028684470820969338

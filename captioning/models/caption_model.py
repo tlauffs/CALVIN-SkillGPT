@@ -7,7 +7,7 @@ from enum import Enum
 from typing import Optional
 import torch
 import torch.nn as nn
-from dataset import AttrDict 
+from utils.utils import AttrDict
 import config as CFG
 
 

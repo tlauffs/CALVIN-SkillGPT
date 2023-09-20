@@ -7,21 +7,7 @@ from torchvision import transforms
 import clip
 import config as CFG
 import torch
-
-class AttrDict(dict):
-    __setattr__ = dict.__setitem__
-
-    def __getattr__(self, attr):
-        try:
-            return self.__getitem__(attr)
-        except KeyError:
-            raise AttributeError("Attribute %r not found" % attr)
-
-    def __getstate__(self):
-        return self
-
-    def __setstate__(self, d):
-        self = d
+from utils.utils import AttrDict
 
 class BCDataset(Dataset):
 
@@ -44,9 +30,12 @@ class BCDataset(Dataset):
         #self.action_stats = AttrDict(mean=np.array([0.0001016613095998764, 0.0026315886061638594], dtype=np.float32),
         #                             std=np.array([0.008755197748541832, 0.010186241939663887]), dtype=np.float32)
 
-        self.action_stats = AttrDict(mean=np.array([ 0.05244775, -0.12080607, 0.50815218, 1.01496132, -0.03902264, 1.56418701, 0.13438409], dtype=np.float32),
-                                     std=np.array([0.15992226, 0.10983621, 0.0623301, 2.90982278, 0.10183952, 0.34633791, 0.99092932]), dtype=np.float32)
+    #    self.action_stats = AttrDict(mean=np.array([ 0.05244775, -0.12080607, 0.50815218, 1.01496132, -0.03902264, 1.56418701, 0.13438409], dtype=np.float32),
+     #                                std=np.array([0.15992226, 0.10983621, 0.0623301, 2.90982278, 0.10183952, 0.34633791, 0.99092932]), dtype=np.float32)
                                     
+        self.action_stats = AttrDict(mean=np.array([ 0.05829782, -0.11443839,  0.5123094,   0.97989569, -0.03639337,  1.55281177, 0.01424668], dtype=np.float32),
+                                     std=np.array([0.1525908,  0.09533093, 0.05158806, 2.920689, 0.10144497, 0.56220544, 0.99989851]), dtype=np.float32)
+
     def __len__(self):
         return len(self.caption_data)
     

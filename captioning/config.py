@@ -1,6 +1,9 @@
 import torch
 
 
+
+calvin_env_path = "/media/tim/E/calvin_env"
+
 '''
 datapath_training = '/home/tim/calvin_debug_dataset/training'
 datapath_val = '/home/tim/calvin_debug_dataset/validation'
@@ -33,7 +36,7 @@ n_layers = 3
 epochs = 1000
 
 
-start_epi_dd = 53819
+start_epi_dd = 0
 end_epi_dd = 611098
 
 modifed_emb_path = 'generated_captions/modified_emb.npy'
