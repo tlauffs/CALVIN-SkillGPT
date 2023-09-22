@@ -17,7 +17,7 @@ datapath_val = '/media/tim/E/datasets/task_D_D/validation'
 #datapath_val_parsed = '/media/tim/E/datasets/task_D_D_parsed/validation'
 
 datapath_training_abcd = '/media/tim/E/task_ABC_D/training'
-datapath_val_abcd  = '/media/tim/E/task_ADC_D/validation'
+datapath_val_abcd  = '/media/tim/E/task_ABC_D/validation'
 
 datapath_training_parsed = '/media/tim/E/datasets/task_D_D_parsed_combined/training'
 datapath_val_parsed = '/media/tim/E/datasets/task_D_D_parsed_combined/validation'
