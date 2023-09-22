@@ -60,6 +60,8 @@ class BCDataset(Dataset):
         img_static = data['rgb_static']
         img_gripper = data['rgb_gripper']
         action = data['actions']
+        rel_action = data['rel_actions'].astype(np.float32)
+        robot_obs = data['robot_obs'].astype(np.float32)
         # normalize action
         action = ((action - self.action_stats.mean) / self.action_stats.std).astype(np.float32)
         img_static = self.transform(img_static)
@@ -67,7 +69,9 @@ class BCDataset(Dataset):
 
         return AttrDict(img_static=img_static,
                         img_gripper=img_gripper,
+                        robot_obs=robot_obs,
                         action=action,
+                        rel_action=rel_action,
                         text_encoding=clip_text_features
                         )
 

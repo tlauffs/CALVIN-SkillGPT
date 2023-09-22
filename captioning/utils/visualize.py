@@ -60,11 +60,11 @@ def visualize():
         else:
             print(f'Unrecognized keycode "{key}"')
 
-def showImages(startindex, datapath):
+def showImages(startindex, datapath, range=[0, 16, 32, 48, 64]):
     plot_index = 1
-    plt.figure(figsize=(16, 6), dpi=80)
+    plt.figure(figsize=(len(range)*4, 7.5), dpi=80)
     for d in ["rgb_static", "rgb_gripper"]:
-        for index in [0, 16, 32, 48, 64]:
+        for index in range:
             index = index + startindex
             frame = np.load(f"{datapath}/episode_{index:07d}.npz", allow_pickle=True)
             if d not in frame:
@@ -72,7 +72,7 @@ def showImages(startindex, datapath):
                 continue
             
             img = frame[d]
-            plt.subplot(2, 5, plot_index)
+            plt.subplot(2, len(range), plot_index)
             plt.imshow(img)
             plt.axis('off')
             plot_index += 1

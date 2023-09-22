@@ -40,38 +40,44 @@ class EvaluateBCAgent():
 
         self.policy = LanguageConditionedPolicy(language_dim=512, action_dim=7)
         # self.policy.load_state_dict(torch.load("/media/tim/E/hulc_captioning/captioning/checkpoints/bc_policy/bc_policy_static_2/bc_policy_static-036.pt"))
-        self.policy.load_state_dict(torch.load("/media/tim/E/hulc_captioning/captioning/checkpoints/bc_policy/bc_policy_gripper/bc_policy_static-009.pt"))
+        #self.policy.load_state_dict(torch.load("/media/tim/E/hulc_captioning/captioning/checkpoints/bc_policy/bc_policy_gripper_static/bc_policy-007.pt"))
+
+        self.policy.load_state_dict(torch.load("/media/tim/E/hulc_captioning/captioning/checkpoints/bc_policy/bc_static_gripper_obs/bc_policy-043.pt"))
         self.policy = self.policy.to(self.device)
 
         self.action_stats = AttrDict(mean=np.array([ 0.05829782, -0.11443839,  0.5123094,   0.97989569, -0.03639337,  1.55281177, 0.01424668], dtype=np.float32),
                                      std=np.array([0.1525908,  0.09533093, 0.05158806, 2.920689, 0.10144497, 0.56220544, 0.99989851]), dtype=np.float32)
 
         
-        # initialize the visual autoencoder
-        self.visual_autoencoder = VisualAutoencoder(512)
-        self.visual_autoencoder = self.visual_autoencoder.to(self.device)
+        self.visual_autoencoder_static = VisualAutoencoder(512)
+        self.visual_autoencoder_static = self.visual_autoencoder_static.to(self.device) 
+        self.visual_autoencoder_static.load_state_dict(torch.load("/media/tim/E/hulc_captioning/captioning/checkpoints/image_vae/image_vae_static_full_long/image_vae_static_full_high_res-045.pt"))
+        self.image_encoder_static = self.visual_autoencoder_static.encoder
+
         
-        # load the weights
-        # self.visual_autoencoder.load_state_dict(torch.load("/media/tim/E/hulc_captioning/captioning/checkpoints/image_vae/image_vae_static_full_long/image_vae_static_full_high_res-045.pt"))
-        self.visual_autoencoder.load_state_dict(torch.load("/media/tim/E/hulc_captioning/captioning/checkpoints/image_vae/image_vae_gripper/image_vae_gripper_high_res-017.pt"))
-        self.image_encoder = self.visual_autoencoder.encoder
+        # initialize the visual autoencoder
+        self.visual_autoencoder_gripper = VisualAutoencoder(512)
+        self.visual_autoencoder_gripper = self.visual_autoencoder_gripper.to(self.device)
+        self.visual_autoencoder_gripper.load_state_dict(torch.load("/media/tim/E/hulc_captioning/captioning/checkpoints/image_vae/image_vae_gripper/image_vae_gripper_high_res-017.pt"))
+        self.image_encoder_gripper = self.visual_autoencoder_gripper.encoder
 
     def get_env(self, cfg):
         env = hydra.utils.instantiate(cfg.env, show_gui=True, use_vr=False, use_scene_info=True)
         return env
 
     @torch.no_grad()
-    def get_obs(self):
+    def get_rgb_obs(self):
         #im = obs['rgb']
        # im = obs['scene_obs']['rgb_obs']['rgb_static']
        # o = self.transform(im).unsqueeze(0).to(self.device)
          
         rgb_obs = self.env.get_obs()['rgb_obs']
-       #  im = rgb_obs['rgb_static']
-        im = rgb_obs['rgb_gripper']
-        o = self.transform(im).unsqueeze(0).to(self.device)
-
-        return o
+        return rgb_obs
+    
+    @torch.no_grad()
+    def get_robot_obs(self):
+        robot_obs = self.env.get_state_obs()['robot_obs']
+        return robot_obs
 
     def _sample_seq(self):
         return np.random.choice(self.dataset)
@@ -82,6 +88,9 @@ class EvaluateBCAgent():
         self.env.reset()
 
 
+        robot_obs = self.get_robot_obs().astype(np.float32)
+        print(torch.from_numpy(robot_obs))
+      #  return
       #  obs = self.get_obs()
       #  plt.imshow(obs)
       #  plt.show()
@@ -99,22 +108,31 @@ class EvaluateBCAgent():
                 #text_encoding = self.model.text_projection_head(clip_text_features)
                 #text_encoding = text_encoding / text_encoding.norm(dim=1, keepdim=True)
 
-                o = self.get_obs()
-                o = self.image_encoder(o)
-                a = self.policy(text_encoding, o).detach().cpu().numpy()[0]
+                rgb_obs = self.get_rgb_obs()
+                img_static = rgb_obs['rgb_static']
+                img_gripper = rgb_obs['rgb_gripper']
+                 # im = rgb_obs['rgb_gripper']
+                o_static = self.transform(img_static).unsqueeze(0).to(self.device)
+                o_static = self.image_encoder_static(o_static)
+                o_gripper = self.transform(img_gripper).unsqueeze(0).to(self.device)
+                o_gripper = self.image_encoder_gripper(o_gripper)
 
+                robot_obs = self.get_robot_obs().astype(np.float32)
+                robot_obs = torch.from_numpy(robot_obs).unsqueeze(0).to(self.device)
+
+                a = self.policy(text_encoding, o_static, o_gripper, robot_obs).detach().cpu().numpy()[0]
 
 
                 # unnormalize actions
                 a = a * self.action_stats.std + self.action_stats.mean
+                
                 # change gripper action to 1 or -1
                 if abs(a[-1] - 1) < abs(a[-1] - (-1)):
                     a[-1] = 1
                 else:
                     a[-1] = -1
+                a = (tuple(a[:3]), tuple(a[3:6]), (a[6],))
                 print(np.array(a))
-
-                # a = np.array((0., 0, 0, 0, 0, 0, 1))
         
                 
 
@@ -123,8 +141,8 @@ class EvaluateBCAgent():
                 # pdb.set_trace()
 
                 # self.env.render()
-                im_rgb = cv2.cvtColor(obs['rgb_obs']['rgb_gripper'], cv2.COLOR_BGR2RGB)
-                cv2.imshow('w', im_rgb)
+                im_rgb = cv2.cvtColor(obs['rgb_obs']['rgb_static'], cv2.COLOR_BGR2RGB)
+                cv2.imshow('static', im_rgb)
                 cv2.waitKey(0)
 
                 steps += 1
@@ -132,7 +150,6 @@ class EvaluateBCAgent():
                 if steps > 64 or done:
 
                     obs = self.env.reset()
-                    o = self.get_obs(obs)
                     steps = 0
                     break
 
