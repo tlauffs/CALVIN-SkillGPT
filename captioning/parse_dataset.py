@@ -102,34 +102,23 @@ def add_lang_annotations(stop_token: str = ' \n'):
     print("added stop token to annotations")
 
 
+parse_val = False
 
+#src_folder= CFG.datapath_training
+#parse_folder= CFG.datapath_training_parsed
 
-
-
-parse_val = True
-
-src_folder= CFG.datapath_training
-parse_folder= CFG.datapath_training_parsed
-
-if(parse_val):
-    print("parsing validation data, change flase to False to parse train data")
-    src_folder= CFG.datapath_val
-    parse_folder= CFG.datapath_val_parsed 
+src_folder= CFG.datapath_training_abcd
+parse_folder= CFG.datapath_training_abcd_parsed
 
 parse()
 add_lang_annotations()
 
+parse_val = True
 
-"""
-ann_source = "{}/lang_annotations".format(src_folder)
-ann_dest = "{}/lang_annotations".format(parse_folder)
-shutil.rmtree(ann_dest)
-shutil.copytree(ann_source, ann_dest)
-"""
-"""
-ann_path = "{}/lang_annotations/auto_lang_ann.npy".format(parse_folder)
-annotations = np.load(ann_path, allow_pickle=True).item()
-annotations = annotations["language"]["ann"]
-for annotation in annotations:
-    print(annotation)
-"""
+print("parsing validation data, change flase to False to parse train data")
+
+src_folder= CFG.datapath_val_abcd
+parse_folder= CFG.datapath_val_abcd_parsed 
+
+parse()
+add_lang_annotations()
