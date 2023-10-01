@@ -4,7 +4,6 @@ import config as CFG
 
 
 def beamsearch(model, tokenizer, embed, beam_size: int = 5, stop_token: str = '\n'):
-    model.eval()
     scores = None
     tokens = None
     stop_token_index = tokenizer.encode(stop_token)[0]
