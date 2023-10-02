@@ -24,11 +24,6 @@ def r3m_preprocess_2(n_px=224):
         ToTensor()
     ])
 
-
-
-#src_folder= CFG.datapath_training
-#parse_folder= CFG.datapath_training_parsed
-
 def parse(): 
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -104,11 +99,11 @@ def add_lang_annotations(stop_token: str = ' \n'):
 
 parse_val = False
 
-src_folder= CFG.datapath_training
-parse_folder= '/media/tim/E/datasets/task_D_D_parsed_2/training'
+#src_folder= CFG.datapath_training
+#parse_folder= '/media/tim/E/datasets/task_D_D_parsed_2/training'
 
-#src_folder= CFG.datapath_training_abcd
-#parse_folder= CFG.datapath_training_abcd_parsed
+src_folder= CFG.datapath_training_abcd
+parse_folder= '/media/tim/E/datasets/task_ABC_D_parsed_2/training'
 
 parse()
 add_lang_annotations()
@@ -117,8 +112,8 @@ parse_val = True
 
 print("parsing validation data, change flase to False to parse train data")
 
-src_folder= CFG.datapath_val
-parse_folder= '/media/tim/E/datasets/task_D_D_parsed_2/validation'
+src_folder= CFG.datapath_val_abcd
+parse_folder= '/media/tim/E/datasets/task_ABC_D_parsed_2/validation'
 
 parse()
 add_lang_annotations()

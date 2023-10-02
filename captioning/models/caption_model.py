@@ -25,8 +25,8 @@ class PositionalEncoding(nn.Module):
         div_term = torch.exp(torch.arange(0, d_model, 2) * (-math.log(10000.0) / d_model))
         pe = torch.zeros(1, max_len, d_model)
         pe[0, :, 0::2] = torch.sin(position * div_term)
-        # pe[0, :, 1::2] = torch.cos(position * div_term)
-        pe[0, :, 1::2] = torch.cos(position * div_term[:-1])
+        pe[0, :, 1::2] = torch.cos(position * div_term)
+        #pe[0, :, 1::2] = torch.cos(position * div_term[:-1])
 
         
         self.register_buffer('pe', pe)
@@ -48,9 +48,10 @@ class BehaviourEncoder(nn.Module):
 
         image_features = src.observations # images: [batch_size, sequence_length, 2048]
         actions = src.actions
+        state = src.state
 
         src_key_padding_mask = (image_features.mean(dim=2)==0.0)
-        features = torch.cat((image_features, actions), dim=-1)
+        features = torch.cat((image_features, actions, state), dim=-1)
 
         # Transformer encoder
         # add positional encoding

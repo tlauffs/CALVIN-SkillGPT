@@ -4,21 +4,18 @@ import torch
 
 calvin_env_path = "/media/tim/E/calvin_env"
 
-'''
-datapath_training = '/home/tim/calvin_debug_dataset/training'
-datapath_val = '/home/tim/calvin_debug_dataset/validation'
-datapath_training_parsed = '/home/tim/calvin_debug_dataset_parsed/training'
-datapath_val_parsed = '/home/tim/calvin_debug_dataset_parsed/validation'
-'''
 
 datapath_training = '/media/tim/E/datasets/task_D_D/training'
 datapath_val = '/media/tim/E/datasets/task_D_D/validation'
 #datapath_training_parsed = '/media/tim/E/datasets/task_D_D_parsed/training'
 #datapath_val_parsed = '/media/tim/E/datasets/task_D_D_parsed/validation'
 
-datapath_training_parsed = '/media/tim/E/datasets/task_D_D_parsed_combined/training'
-datapath_val_parsed = '/media/tim/E/datasets/task_D_D_parsed_combined/validation'
 
+#datapath_training_parsed = '/media/tim/E/datasets/task_D_D_parsed_combined/training'
+#datapath_val_parsed = '/media/tim/E/datasets/task_D_D_parsed_combined/validation'
+
+datapath_training_parsed = '/media/tim/E/datasets/task_D_D_parsed_2/training'
+datapath_val_parsed = '/media/tim/E/datasets/task_D_D_parsed_2/validation'
 
 datapath_training_abcd = '/media/tim/E/task_ABC_D/training'
 datapath_val_abcd  = '/media/tim/E/task_ABC_D/validation'
@@ -34,8 +31,10 @@ max_seq_length = 16
 batch_size = 16
 num_workers = 10
 
-d_model = 2055 
-n_heads = 5
+#d_model = 2055 
+d_model = 2070
+# n_heads = 5
+n_heads = 6
 
 dropout = 0.1
 # dim_feedforward

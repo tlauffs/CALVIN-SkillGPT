@@ -57,13 +57,16 @@ class CustomDataset(Dataset):
         start_epi = annotation[0][0]
 
         actions = torch.zeros(64, 7) 
+        state = torch.zeros(64, 15) 
         observations = torch.zeros(64, 2048) 
 
         for i in range(0, 63):
             epi_num = str(start_epi + i).zfill(7)
             file_path = os.path.join(self.data_path, "episode_{}.npz".format(epi_num))
             data = np.load(file_path)
-            actions[i] = torch.tensor(data['actions'])   
+            actions[i] = torch.tensor(data['actions'])
+            state[i] = torch.tensor(data['robot_obs'])
+
             if self.observation_data == 'static':
                 observations[i] = torch.tensor(data['rgb_static'])
             elif self.observation_data == 'gripper':
@@ -73,5 +76,5 @@ class CustomDataset(Dataset):
 
 
 
-        return AttrDict({'gpt_tokens': gpt_tokens, 'gpt_mask': gpt_mask, 'instruction': caption,'caption_index': caption_index,'actions': actions,'observations': observations})
+        return AttrDict({'gpt_tokens': gpt_tokens, 'gpt_mask': gpt_mask, 'instruction': caption,'caption_index': caption_index,'actions': actions,'state': state ,'observations': observations})
     

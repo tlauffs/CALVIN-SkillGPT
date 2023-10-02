@@ -26,15 +26,17 @@ def generate_annotations(start, stop, threshold, data_path, model_path):
     for i in tqdm(range(start_epi, end_epi, stride)):
         if os.path.exists(f"{data_path}/episode_{i:07d}.npz") and os.path.exists(f"{data_path}/episode_{i + window_size:07d}.npz"):
             actions = torch.zeros(64, 7) 
+            state = torch.zeros(64, 15) 
             observations = torch.zeros(64, 2048) 
             for idx, j in enumerate(range(i, i + window_size)):
                 # print(idx, j)
                 data = np.load(f"{data_path}/episode_{j:07d}.npz", allow_pickle=True)
                 actions[idx] = torch.tensor(data['actions'])
+                state[idx] = torch.tensor(data['state'])
                 observations[idx] = torch.tensor(data['observations'])
             actions = actions.to(CFG.device)
             observations = observations.to(CFG.device)
-            src = AttrDict(observations=observations.unsqueeze(0), actions=actions.unsqueeze(0))
+            src = AttrDict(observations=observations.unsqueeze(0), actions=actions.unsqueeze(0), state=state.unsqueeze(0))
             behaviour_encoding = best_model.behaviour_encoder(src)
             prefix_embed = best_model.project_to_gpt(behaviour_encoding)
             generated_caption =  beamsearch(best_model, tokenizer, prefix_embed)
@@ -54,14 +56,16 @@ def generate_annotation(start,data_path, model_path):
 
     if os.path.exists(f"{data_path}/episode_{start_epi:07d}.npz") and os.path.exists(f"{data_path}/episode_{start_epi + window_size:07d}.npz"):
         actions = torch.zeros(64, 7) 
+        state = torch.zeros(64, 15) 
         observations = torch.zeros(64, 2048) 
         for idx, j in enumerate(range(start_epi, start_epi + window_size)):
             data = np.load(f"{data_path}/episode_{j:07d}.npz", allow_pickle=True)
             actions[idx] = torch.tensor(data['actions'])
+            state[idx] = torch.tensor(data['state'])
             observations[idx] = torch.tensor(data['observations'])
         actions = actions.to(CFG.device)
         observations = observations.to(CFG.device)
-        src = AttrDict(observations=observations.unsqueeze(0), actions=actions.unsqueeze(0))
+        src = AttrDict(observations=observations.unsqueeze(0), actions=actions.unsqueeze(0), state=state.unsqueeze(0))
         behaviour_encoding = best_model.behaviour_encoder(src)
         prefix_embed = best_model.project_to_gpt(behaviour_encoding)
         generated_caption =  beamsearch(best_model, tokenizer, prefix_embed)       
