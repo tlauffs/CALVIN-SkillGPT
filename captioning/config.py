@@ -31,10 +31,10 @@ max_seq_length = 16
 batch_size = 16
 num_workers = 10
 
-#d_model = 2055 
-d_model = 2070
-# n_heads = 5
-n_heads = 6
+d_model = 2055 
+#d_model = 2070
+n_heads = 5
+#n_heads = 6
 
 dropout = 0.1
 # dim_feedforward
@@ -46,9 +46,9 @@ epochs = 1000
 start_epi_dd = 0
 end_epi_dd = 611098
 
-modifed_emb_path = 'generated_captions/modified_emb.npy'
-generated_captions_path = 'generated_captions/generated_captions.npy'
-combined_captions_path = 'generated_captions/combined_captions.npy'
+modifed_emb_path = 'generated_captions/d_d/modified_captions.npy'
+generated_captions_path = 'generated_captions/d_d/generated_captions.npy'
+combined_captions_path = 'generated_captions/d_d/combined_captions.npy'
 
 #for VAE model
 img_size = 180

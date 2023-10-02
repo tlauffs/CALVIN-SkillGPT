@@ -55,5 +55,5 @@ def beamsearch(model, tokenizer, embed, beam_size: int = 5, stop_token: str = '\
     order = scores.argsort(descending=True)
     output_texts = [output_texts[i] for i in order]
     output_scores = [torch.exp(scores[i]) for i in order]
-    result = [(caption, score) for caption, score in zip(output_texts, output_scores)]
+    result = [(caption.strip(), score) for caption, score in zip(output_texts, output_scores)]
     return result

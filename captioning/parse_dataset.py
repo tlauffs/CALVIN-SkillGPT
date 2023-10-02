@@ -59,7 +59,7 @@ def parse():
 
 
         processed_npz_path = os.path.join(parse_folder, data_episode)
-        np.savez(processed_npz_path, observations=observations_transform, rgb_static=static_transform, rgb_gripper=gripper_transform, actions=data['actions'], robot_obs=data["robot_obs"])
+        np.savez(processed_npz_path, observations=observations_transform, rgb_static=static_transform, rgb_gripper=gripper_transform, actions=data['actions'], rel_actions=data['rel_actions'], robot_obs=data["robot_obs"])
 
         if os.name == 'nt': 
             os.system('cls')
@@ -104,11 +104,11 @@ def add_lang_annotations(stop_token: str = ' \n'):
 
 parse_val = False
 
-src_folder= CFG.datapath_training
-parse_folder= '/media/tim/E/datasets/task_D_D_parsed_2/training'
+#src_folder= CFG.datapath_training
+#parse_folder= '/media/tim/E/datasets/task_D_D_parsed_2/training'
 
-#src_folder= CFG.datapath_training_abcd
-#parse_folder= CFG.datapath_training_abcd_parsed
+src_folder= CFG.datapath_training_abcd
+parse_folder= '/media/tim/E/datasets/task_ABC_D_parsed/training'
 
 parse()
 add_lang_annotations()
@@ -117,8 +117,9 @@ parse_val = True
 
 print("parsing validation data, change flase to False to parse train data")
 
-src_folder= CFG.datapath_val
-parse_folder= '/media/tim/E/datasets/task_D_D_parsed_2/validation'
+
+src_folder= CFG.datapath_val_abcd
+parse_folder= '/media/tim/E/datasets/task_ABC_D_parsed/validation'
 
 parse()
 add_lang_annotations()
