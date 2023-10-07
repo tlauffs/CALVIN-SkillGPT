@@ -18,13 +18,6 @@ class CustomDataset(Dataset):
         self.caption_data = self.load_caption_data(caption_path)
         self.data_files = [f for f in os.listdir(data_path) if f.startswith('episode_')]
         self.observation_data = observation_data
-        '''
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.r3m = load_r3m("resnet50")
-        self.r3m.eval()
-        self.r3m.to(self.device)
-        self.transform =  r3m_preprocess()
-        '''
 
     def __len__(self):
         return len(self.caption_data)
@@ -51,9 +44,6 @@ class CustomDataset(Dataset):
         gpt_mask = gpt_tokens.ge(0)
         gpt_tokens[~gpt_mask] = 0
         gpt_mask = gpt_mask.float()
-       
-       # clip_text_features = clip_text_encoder(clip.tokenize(instruction).to(device)).detach().cpu().numpy()
-
         start_epi = annotation[0][0]
 
         actions = torch.zeros(64, 7) 
