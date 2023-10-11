@@ -89,6 +89,7 @@ def add_lang_annotations(stop_token: str = ' \n'):
     annotations = np.load(ann_path, allow_pickle=True).item()
 
     annotations_language = annotations["language"]["ann"]
+    annotations_task = annotations["language"]["task"]
     annotations_info = annotations["info"]["indx"]
 
     stop_annotations = []
@@ -98,7 +99,7 @@ def add_lang_annotations(stop_token: str = ' \n'):
 
     stop_annotations = np.array(stop_annotations)
 
-    np.save(ann_path, {"language": {"ann": stop_annotations}, "info": {"indx": annotations_info}}, allow_pickle=True)
+    np.save(ann_path, {"language": {"ann": stop_annotations, "task": annotations_task}, "info": {"indx": annotations_info}}, allow_pickle=True)
     print("added stop token to annotations")
 
 
