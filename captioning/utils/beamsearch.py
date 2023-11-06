@@ -6,6 +6,8 @@ import config as CFG
     beamsearch decoding
     code adapted from: https://github.com/krishanrana/skillGPT/blob/distributional_SkillGPT/skillGPT/utils/captioning_utils.py
 '''
+
+
 def beamsearch(model, tokenizer, embed, beam_size: int = 5, stop_token: str = '\n'):
     scores = None
     tokens = None
@@ -18,13 +20,13 @@ def beamsearch(model, tokenizer, embed, beam_size: int = 5, stop_token: str = '\
             outputs = model.gpt(inputs_embeds=generated)
             logits = outputs.logits[:, -1, :]
             logits = logits.softmax(-1).log()
-            #print(logits.shape)
+            # print(logits.shape)
             if scores is None:
                 scores, next_tokens = logits.topk(beam_size, -1)
-                #print(scores)
-                #print(next_tokens)
+                # print(scores)
+                # print(next_tokens)
                 generated = generated.expand(beam_size, *generated.shape[1:])
-                #print(generated.shape)
+                # print(generated.shape)
                 next_tokens, scores = next_tokens.permute(1, 0), scores.squeeze(0)
                 if tokens is None:
                     tokens = next_tokens

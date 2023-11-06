@@ -10,8 +10,9 @@ import matplotlib.pyplot as plt
     function to visualize calvin dataset ()
     code adapted from: https://github.com/mees/calvin/blob/main/scripts/visualize_dataset.py
 """
-def visualize():
 
+
+def visualize():
     path = CFG.datapath_training
     data = ["rgb_static", "rgb_gripper"]
 
@@ -66,9 +67,11 @@ def visualize():
 """
     function to visualize images from startindex in range
 """
+
+
 def showImages(startindex, datapath, range=[0, 8, 16, 24, 32, 40, 48, 56, 64]):
     plot_index = 1
-    plt.figure(figsize=(len(range)*4, 7.5), dpi=80)
+    plt.figure(figsize=(len(range) * 4, 7.5), dpi=80)
     for d in ["rgb_static", "rgb_gripper"]:
         for index in range:
             index = index + startindex
@@ -76,7 +79,7 @@ def showImages(startindex, datapath, range=[0, 8, 16, 24, 32, 40, 48, 56, 64]):
             if d not in frame:
                 print(f"Data {d} cannot be found in transition")
                 continue
-            
+
             img = frame[d]
             plt.subplot(2, len(range), plot_index)
             plt.imshow(img)

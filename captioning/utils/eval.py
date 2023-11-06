@@ -1,4 +1,3 @@
-
 import os
 import numpy as np
 import pandas as pd
@@ -10,10 +9,11 @@ import config as CFG
 from torch.nn import functional as nnf
 import matplotlib.pyplot as plt
 
-
 """
     Calculate loss of caption model
 """
+
+
 def evaluate_loss(path, dataloader):
     clip_model, _ = clip.load("ViT-B/32", device=CFG.device, jit=True)
     clip_text_encoder = clip_model.encode_text
@@ -22,10 +22,9 @@ def evaluate_loss(path, dataloader):
     mapper_model = mapper_model.eval()
     total_loss = 0
     for data in dataloader:
-
         data.observations = data.observations.to(CFG.device)
         data.actions = data.actions.to(CFG.device)
-        #data.state = data.state.to(CFG.device)
+        # data.state = data.state.to(CFG.device)
         data.instruction = clip_text_encoder(clip.tokenize(data.instruction).to(CFG.device)).to(CFG.device)
         data.gpt_tokens = data.gpt_tokens.to(CFG.device)
         data.gpt_mask = data.gpt_mask.to(CFG.device)
@@ -34,16 +33,17 @@ def evaluate_loss(path, dataloader):
 
         with torch.no_grad():
             logits = outputs.logits[:, data.observations.shape[1] - 1: -1]
-            loss = nnf.cross_entropy(logits.reshape(-1, logits.shape[-1]), data.gpt_tokens.flatten(), ignore_index=0)    
+            loss = nnf.cross_entropy(logits.reshape(-1, logits.shape[-1]), data.gpt_tokens.flatten(), ignore_index=0)
             total_loss += loss.item()
-    return total_loss  / len(dataloader)
+    return total_loss / len(dataloader)
 
 
 """
     Calculate loss of generalized caption model
 """
-def evaluate_loss_abc_sim(path, dataloader, envs, mode):
 
+
+def evaluate_loss_abc_sim(path, dataloader, envs, mode):
     clip_model, _ = clip.load("ViT-B/32", device=CFG.device, jit=True)
     clip_text_encoder = clip_model.encode_text
 
@@ -56,7 +56,7 @@ def evaluate_loss_abc_sim(path, dataloader, envs, mode):
         for env in envs:
             data.observations[env] = data.observations[env].to(CFG.device)
             data.actions[env] = data.actions[env].to(CFG.device)
-        #data.state = data.state.to(CFG.device)
+        # data.state = data.state.to(CFG.device)
         data.instruction = clip_text_encoder(clip.tokenize(data.instruction).to(CFG.device)).to(CFG.device)
         data.gpt_tokens = data.gpt_tokens.to(CFG.device)
         data.gpt_mask = data.gpt_mask.to(CFG.device)
@@ -71,11 +71,14 @@ def evaluate_loss_abc_sim(path, dataloader, envs, mode):
         average_loss = sum(losses) / len(losses)
         total_loss += average_loss.item()
 
-    return total_loss  / len(dataloader)
+    return total_loss / len(dataloader)
+
 
 """
     plot and compare loss data
 """
+
+
 def plot_losses(csv_folder):
     for filename in os.listdir(csv_folder):
         csv_filepath = os.path.join(csv_folder, filename)
@@ -86,12 +89,11 @@ def plot_losses(csv_folder):
             print('DGDFG')
             loss_data = loss_data.iloc[::2]
             loss_data['epoch'] = range(1, len(loss_data) + 1)
-        
-        loss_data = loss_data[loss_data['epoch'] <= 40] 
+
+        loss_data = loss_data[loss_data['epoch'] <= 40]
         epochs = loss_data['epoch']
         val_loss = loss_data['val_loss']
         train_loss = loss_data['train_loss']
-
 
         val_loss = np.log(val_loss)
         train_loss = np.log(train_loss)
@@ -103,7 +105,7 @@ def plot_losses(csv_folder):
         title = 'Loss Over Epochs for: ' + csv_filepath
         plt.title(title)
         plt.legend()
-        #plt.savefig('./results/abc_d/loss.png')
+        # plt.savefig('./results/abc_d/loss.png')
         plt.grid(True)
         plt.show()
 
@@ -115,16 +117,15 @@ def plot_losses(csv_folder):
                 best_epoch = epoch
         print("best loss for ", csv_filepath, " for epoch ", best_epoch, ": ", best_val_loss)
 
-
     for filename in os.listdir(csv_folder):
         csv_filepath = os.path.join(csv_folder, filename)
         loss_data = pd.read_csv(csv_filepath)
         if filename == 'abcd_loss_improved_full.csv':
             print('DGDFG')
             loss_data = loss_data.iloc[::2]
-            loss_data['epoch'] = range(1, len(loss_data) + 1) 
+            loss_data['epoch'] = range(1, len(loss_data) + 1)
         loss_data = loss_data[loss_data['epoch'] <= 45]
-        #loss_data = loss_data[loss_data['epoch'] >= 10]
+        # loss_data = loss_data[loss_data['epoch'] >= 10]
         epochs = loss_data['epoch']
         val_loss = loss_data['val_loss']
         val_loss = np.log(val_loss)
@@ -137,14 +138,13 @@ def plot_losses(csv_folder):
     plt.legend()
     plt.show()
 
-
     for filename in os.listdir(csv_folder):
         csv_filepath = os.path.join(csv_folder, filename)
         loss_data = pd.read_csv(csv_filepath)
         if filename == 'abcd_loss_improved_full.csv':
             print('DGDFG')
             loss_data = loss_data.iloc[::2]
-            loss_data['epoch'] = range(1, len(loss_data) + 1) 
+            loss_data['epoch'] = range(1, len(loss_data) + 1)
         loss_data = loss_data[loss_data['epoch'] <= 45]
         epochs = loss_data['epoch']
         train_loss = loss_data['train_loss']
@@ -157,4 +157,3 @@ def plot_losses(csv_folder):
     plt.title(title)
     plt.legend()
     plt.show()
-
