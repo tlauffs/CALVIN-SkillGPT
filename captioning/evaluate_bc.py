@@ -1,10 +1,16 @@
+'''
+    attempt to evaluate CLASP on behavior generation downstream task:
+    IMPORTANT: this code is broken and doesnt produce proper results
+    requires calvin_env:
+    https://github.com/mees/calvin_env/tree/1431a46bd36bde5903fb6345e68b5ccc30def666
+'''
 
 import torch
 import numpy as np
 from torchvision import transforms
 
-from models.visual_autoencoder import VisualAutoencoder
-from models.bc_policy import LanguageConditionedPolicy
+from captioning.models.bc.visual_autoencoder import VisualAutoencoder
+from captioning.models.bc.bc_policy import LanguageConditionedPolicy
 
 from torchvision.transforms import InterpolationMode
 import config as CFG
@@ -13,9 +19,12 @@ import pdb
 import cv2 
 import matplotlib.pyplot as plt
 import hydra
-from utils.utils import AttrDict
+from utils.util import AttrDict
 
 
+'''
+    largely from : https://github.com/krishanrana/skillGPT/blob/distributional_SkillGPT/skillGPT/utils/evaluate_bc_policy.py
+'''
 class EvaluateBCAgent():
     def __init__(self, cfg):
         # self.env = PlayTableSimEnv()
@@ -153,7 +162,10 @@ class EvaluateBCAgent():
                     steps = 0
                     break
 
-
+'''
+    requires calvin_env:
+    https://github.com/mees/calvin_env/tree/1431a46bd36bde5903fb6345e68b5ccc30def666
+'''
 @hydra.main(config_path="/media/tim/E/calvin_env/conf", config_name="config_data_collection")
 def main(cfg):
    # cfg.cameras = 'static_and_gripper'

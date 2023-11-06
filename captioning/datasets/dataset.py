@@ -7,9 +7,35 @@ from sklearn.manifold import TSNE
 from r3m import load_r3m
 import torch
 from torch.utils.data import Dataset
-from utils.utils import AttrDict
+from utils.util import AttrDict
+from transformers import GPT2Tokenizer
+import config as CFG
+
+"""
+    function to get either d_d or abc_d datasets
+"""
+def get_dataset(dataset = 'd', observation_data='static_and_gripper'):
+    tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
+    if dataset == 'abc_d':
+        datapath_training_parsed = CFG.datapath_training_abcd_parsed
+        datapath_val_parsed = CFG.datapath_val_abcd_parsed
+        caption_path_training = '{}/lang_annotations/auto_lang_ann.npy'.format(datapath_training_parsed)
+        caption_path_val = '{}/lang_annotations/auto_lang_ann.npy'.format(datapath_val_parsed)
+    else:
+        datapath_training_parsed = CFG.datapath_training_parsed
+        datapath_val_parsed = CFG.datapath_val_parsed
+        caption_path_training = '{}/lang_annotations/auto_lang_ann.npy'.format(datapath_training_parsed)
+        caption_path_val = '{}/lang_annotations/auto_lang_ann.npy'.format(datapath_val_parsed)
+    observation_data = 'static_and_gripper'
+    train_dataset = CustomDataset(datapath_training_parsed, caption_path_training, tokenizer, CFG.max_seq_length, observation_data)
+    val_dataset  = CustomDataset(datapath_val_parsed, caption_path_val, tokenizer, CFG.max_seq_length, observation_data)
+    return train_dataset, val_dataset, datapath_training_parsed, datapath_val_parsed, caption_path_training, caption_path_val
 
 
+'''
+    Dataset for captioning model:
+    used in captioning.ipynb
+'''
 class CustomDataset(Dataset):
     def __init__(self, data_path, caption_path, tokenizer, max_seq_length, observation_data = 'static_and_gripper'):
         self.tokenizer = tokenizer

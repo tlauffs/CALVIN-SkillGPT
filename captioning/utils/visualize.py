@@ -6,6 +6,10 @@ import numpy as np
 import config as CFG
 import matplotlib.pyplot as plt
 
+"""
+    function to visualize calvin dataset ()
+    code adapted from: https://github.com/mees/calvin/blob/main/scripts/visualize_dataset.py
+"""
 def visualize():
 
     path = CFG.datapath_training
@@ -48,8 +52,6 @@ def visualize():
                     ann_idx = n
 
         # user_input = input("Enter something: ")
-
-
         key = cv2.waitKey(0)
         if key == ord("q"):
             break
@@ -60,7 +62,11 @@ def visualize():
         else:
             print(f'Unrecognized keycode "{key}"')
 
-def showImages(startindex, datapath, range=[0, 16, 32, 48, 64]):
+
+"""
+    function to visualize images from startindex in range
+"""
+def showImages(startindex, datapath, range=[0, 8, 16, 24, 32, 40, 48, 56, 64]):
     plot_index = 1
     plt.figure(figsize=(len(range)*4, 7.5), dpi=80)
     for d in ["rgb_static", "rgb_gripper"]:

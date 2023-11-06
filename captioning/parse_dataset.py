@@ -1,4 +1,11 @@
+'''
+    File to parse the calvin dataset: must be done before training captioning model
+    Alot of the code is taking form the skillGPT codebse: 
+    https://github.com/krishanrana/skillGPT/blob/distributional_SkillGPT/skillGPT/utils/parse_tfds_dataset_r3m.py
+'''
+
 import os
+import argparse
 import numpy as np
 from r3m import load_r3m
 from torchvision.transforms import Compose, Resize, CenterCrop, ToTensor, Normalize, ToPILImage
@@ -23,11 +30,6 @@ def r3m_preprocess_2(n_px=224):
         #CenterCrop(224),
         ToTensor()
     ])
-
-
-
-#src_folder= CFG.datapath_training
-#parse_folder= CFG.datapath_training_parsed
 
 def parse(): 
 
@@ -103,24 +105,35 @@ def add_lang_annotations(stop_token: str = ' \n'):
     print("added stop token to annotations")
 
 
-parse_val = False
+
+parser = argparse.ArgumentParser(description='Script to parse calvin dataset .')
+parser.add_argument("--env", help="can either be d or abc_d")
+args = parser.parse_args()
 
 #src_folder= CFG.datapath_training
-#parse_folder= '/media/tim/E/datasets/task_D_D_parsed_2/training'
-
+#parse_folder= '/media/tim/E/datasets/task_D_D_parsed/training'
 src_folder= CFG.datapath_training_abcd
 parse_folder= '/media/tim/E/datasets/task_ABC_D_parsed/training'
 
-parse()
-add_lang_annotations()
+if(args.env != 'd' and args.env != 'abc_d'):
+    print('please include a argument --env with the value of either d or abc_d')
 
-parse_val = True
+if(args.env == 'd'):
+    src_folder= CFG.datapath_training
+    parse_folder= CFG.datapath_training_parsed
+    parse()
+    add_lang_annotations()
+    src_folder= CFG.datapath_val
+    parse_folder= CFG.datapath_val_parsed
+    parse()
+    add_lang_annotations()
 
-print("parsing validation data, change flase to False to parse train data")
-
-
-src_folder= CFG.datapath_val_abcd
-parse_folder= '/media/tim/E/datasets/task_ABC_D_parsed/validation'
-
-parse()
-add_lang_annotations()
+if(args.env == 'abc_d'):
+    src_folder= CFG.datapath_training_abcd
+    parse_folder= CFG.datapath_training_abcd_parsed
+    parse()
+    add_lang_annotations()
+    src_folder= CFG.datapath_val_abcd
+    parse_folder= CFG.datapath_val_abcd_parsed
+    parse()
+    add_lang_annotations()

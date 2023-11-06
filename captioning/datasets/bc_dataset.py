@@ -7,7 +7,7 @@ from torchvision import transforms
 import clip
 import config as CFG
 import torch
-from utils.utils import AttrDict
+from utils.util import AttrDict
 
 class BCDataset(Dataset):
 

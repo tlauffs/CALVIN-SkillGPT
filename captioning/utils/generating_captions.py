@@ -10,6 +10,9 @@ from models.caption_model import ClipCaptionModel
 from models.generalized_caption_model import ClipGeneralizedCaptionModel
 import config as CFG
 
+"""
+    generate captions using sliding window
+"""
 def generate_annotations(start, stop, threshold, data_path, model_path): 
     window_size = 64
     stride = 32
@@ -49,7 +52,10 @@ def generate_annotations(start, stop, threshold, data_path, model_path):
 
     return generated_captions
 
-def generate_annotation(start,data_path, model_path): 
+"""
+    generate single caption at index start
+"""
+def generate_annotation(start, data_path, model_path): 
     start_epi = start
     window_size = 64
 
@@ -78,6 +84,9 @@ def generate_annotation(start,data_path, model_path):
         return generated_caption
 
 
+"""
+    generate single caption at index start using ClipGeneralizedCaptionModel
+"""
 def generate_annotation_abc(start, data_path, model_path): 
     start_epi = start
     window_size = 64
@@ -104,3 +113,4 @@ def generate_annotation_abc(start, data_path, model_path):
         prefix_embed = best_model.project_to_gpt(behaviour_encoding)
         generated_caption =  beamsearch(best_model, tokenizer, prefix_embed)       
         return generated_caption
+    

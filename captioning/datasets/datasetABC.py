@@ -8,9 +8,12 @@ from sklearn.manifold import TSNE
 from r3m import load_r3m
 import torch
 from torch.utils.data import Dataset
-from utils.utils import AttrDict
+from utils.util import AttrDict
 
-
+'''
+    Dataset for simultanious multienvironment captioning model:
+    used in captioning_ABC_D.ipynb
+'''
 class ABCDataset(Dataset):
     def __init__(self, data_path, caption_path, env_info_path, tokenizer, max_seq_length):
         self.tokenizer = tokenizer

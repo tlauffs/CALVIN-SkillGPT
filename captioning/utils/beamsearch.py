@@ -2,7 +2,10 @@ import numpy as np
 import torch
 import config as CFG
 
-
+'''
+    beamsearch decoding
+    code adapted from: https://github.com/krishanrana/skillGPT/blob/distributional_SkillGPT/skillGPT/utils/captioning_utils.py
+'''
 def beamsearch(model, tokenizer, embed, beam_size: int = 5, stop_token: str = '\n'):
     scores = None
     tokens = None

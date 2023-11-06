@@ -10,7 +10,7 @@ from transformers import GPT2Tokenizer
 from torchvision import transforms
 import tensorflow_datasets as tfds
 import os
-from utils.utils import AttrDict
+from utils.util import AttrDict
 
 BICUBIC = Image.BICUBIC
 

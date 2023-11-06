@@ -1,3 +1,9 @@
+'''
+    behavior captioning model 
+    model code form skillGPT: https://github.com/krishanrana/skillGPT/tree/distributional_SkillGPT
+    Adapted to work on the CALVIN dataset
+'''
+
 import numpy as np
 import math
 from transformers import GPT2LMHeadModel
@@ -7,7 +13,7 @@ from enum import Enum
 from typing import Optional
 import torch
 import torch.nn as nn
-from utils.utils import AttrDict
+from utils.util import AttrDict
 import config as CFG
 
 
