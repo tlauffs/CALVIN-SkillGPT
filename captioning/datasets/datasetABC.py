@@ -114,8 +114,10 @@ class ABCDataset(Dataset):
 
         return AttrDict({'gpt_tokens': gpt_tokens, 'gpt_mask': gpt_mask, 'instruction': caption,'caption_index': caption_index,'actions': actions,'state': state ,'observations': observations})
     
-
-
+'''
+    Validation dataset for simultanious multienvironment captioning model:
+    used in captioning_ABC_D.ipynb
+'''
 class DDataset(Dataset):
     def __init__(self, data_path, caption_path, env_info_path, tokenizer, max_seq_length):
         self.tokenizer = tokenizer
