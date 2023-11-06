@@ -23,7 +23,7 @@ To create a conda enviornment to run the code, follow these steps:
   <a target="_blank" href="https://github.com/mees/calvin/tree/main/dataset">CALVIN Datasets</a>
 </p>
 
-Parse the CALVIN dataset using: `parse_dataset.py`
+Parse the CALVIN dataset using: `parse_dataset.py --env d` or `parse_dataset.py --env abc_d`
 * parsing requires: <a target="_blank" href="https://github.com/facebookresearch/r3m">r3m</a> in the conda enviornment
 
 ensure your `config.py` variables point to the correct datasets
