@@ -44,7 +44,7 @@ To train and evaluate the captioning model 2 juypter notebooks are provided:
 
 ## Visulizations
 
-* `visualizations.ipynb` can be used tro generate various visualizations of the CALVIN dataset
+* `visualizations.ipynb` can be used to generate various visualizations of the CALVIN dataset
 * results of these can be found in `captioning/visualizations` 
 
 ## Results
