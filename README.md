@@ -1,7 +1,7 @@
 # Calvin + skillGPT
 
 <p> This code uses models from the skillGPT repository: 
-  <a target="_blank" href="https://github.com/krishanrana/skillGPT/tree/distributional_SkillGPTh">skillGPT reposository</a>
+  <a target="_blank" href="https://github.com/krishanrana/skillGPT/tree/distributional_SkillGPT">skillGPT reposository</a>
 </p>
 <p> The repository has been modified to allow for training on the CALVIN dataset.</p>
 <p> The CALVIN dataset can be found and downloaded from: 
