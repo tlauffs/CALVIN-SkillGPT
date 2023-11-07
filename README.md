@@ -34,7 +34,7 @@ To train and evaluate the captioning model 2 juypter notebooks are provided:
 
 * `captioning.ipynb` to train the d_d dataset or sequentially train the abc_d dataset 
 * `captioning.ipynb` also contains model evaluation towards the bottom of the notebook
-* `captioning_ABC_D.ipynb` to train the abc_d dataset or simultianiously on all three training enviornments
+* `captioning_ABC_D.ipynb` to train the abc_d dataset simultianiously on all three training enviornments
 
 <p> pre-trained checkpoints can be downloaded from
   <a target="_blank" href="https://uni-bielefeld.sciebo.de/s/g8cqCJbzM2YWBDh">skillGPT CALVIN checkpoints</a>
